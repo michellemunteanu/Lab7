@@ -11,4 +11,4 @@ clean:
 	rm -f sort.o sortutil.o sort
 
 test:
-	./sort < sth.csv
+	./sort < sth.txt

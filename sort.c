@@ -2,34 +2,25 @@
 #include <string.h>
 #include <stdlib.h>
 
+int getarray(char *lines[]);
+void printarray(char *lines[], int max);
+int scmp (char **str1, char **str2);
+
 int main(int argc, char *argv[])
 {
-    char *text[LENGTH];
-    int i=0;
-    
-    FILE *sth;
-    
-//open file to read from
-    sth = fopen("sth.csv", "r");
-    if (sth == NULL)
-    {
-        printf("There was a problem opening the file\n");
-        return 1;
-    }
-//while you haven't reached EOF, assign each line to an array of strings
-    while(fscanf(sth, "%s ", &text[i]) != EOF)
-    {
-	i++;	
-    }
-//after array of strings is complete, excecute command line options
- 
+    char *lines[100];
+    int numlines = getarray(lines);
+    printf("Got %d lines\n", numlines);
+    //printarray(lines, numlines);
+
     int sflag=0;
     int nflag=0;
     int rflag=0;
 
-    if (argc == 1)
+    if (argc == 1) //no option selected -->cat
     {
-	//the input will be copied to the output unchanged
+        printarray(lines, numlines);
+        //the input will be copied to the output unchanged
     }
     for (int i = 1; i < argc; i++)
     {
@@ -48,25 +39,52 @@ int main(int argc, char *argv[])
         else
         {
             printf("Note: -s, -n, or -r are the only valid options\n");
-	    return 1;
+            return 1;
         }
     }
     
     if(sflag)
     {
-	//text output will be sorted in ascending order 
+        //text output will be sorted in ascending order
+        qsort(lines, numlines, sizeof(char *), &scmp);
     }
     else if(nflag)
     {
-	//numeric output will be sorted in ascending order
+        //numeric output will be sorted in ascending order
     }
-    
+
     if(rflag)
     {
 	//the output will be reversed
     }
-//print out array
-fclose(sth);    
-return 0;
+
+
+    printarray(lines, numlines);
+    return 0;    
 }
-                                                                                44,1       
+
+int getarray(char *lines[])
+{
+    int i=0;
+    char *text = (char *)malloc(200);
+    while (fgets(text, 200, stdin) != NULL)
+    {
+	lines[i] = text;
+	i++;
+	text = (char *)malloc(200);
+    }
+    return i;
+}
+
+void printarray(char *lines[], int max)
+{
+    for (int i=0; i<max; i++)
+    {
+	printf("%s", lines[i]);
+    }	
+}
+      
+int scmp (char **str1, char **str2)
+{
+    return strcmp(*str1,*str2);
+}
