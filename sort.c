@@ -5,6 +5,7 @@
 int getarray(char *lines[]);
 void printarray(char *lines[], int max);
 int scmp (char **str1, char **str2);
+int icmp (const void *a, const void *b);
 
 int main(int argc, char *argv[])
 {
@@ -50,6 +51,8 @@ int main(int argc, char *argv[])
     }
     else if(nflag)
     {
+	//sscanf(, 
+	qsort(lines, numlines, sizeof(char *), &icmp);
         //numeric output will be sorted in ascending order
     }
 
@@ -87,4 +90,11 @@ void printarray(char *lines[], int max)
 int scmp (char **str1, char **str2)
 {
     return strcmp(*str1,*str2);
+}
+
+int icmp (const void *a, const void *b)
+{
+    int aa = *(int*)a;
+    int bb = *(int*)b;
+    return aa-bb;
 }
